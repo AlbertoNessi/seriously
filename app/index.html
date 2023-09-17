@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Seriously?</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            background-color: #f2d4b6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 0;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        /* Wrap textarea and input in a div */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea {
+            max-width: 100%;
+            height: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 18px;
+            resize: none;
+        }
+
+        input[type="submit"] {
+            background-color: #3d3d3d;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 20px;
+            align-self: flex-end;
+            width: 100%;
+            /* Align to the right within the div */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        /* CSS for the spinner animation */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 5px solid rgba(0, 0, 0, 0.2);
+            border-top: 5px solid #3d3d3d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0px 0px 10px;
+            display: none; /* Initially hidden */
+            align-self: center;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Seriously?</h1>
+    </header>
+    <main>
+        <form action="chat.php" method="POST" id="verification-form">
+            <div class="form-group">
+                <textarea id="info" name="info" rows="4" cols="50" placeholder="Type your information here..."></textarea>
+                <input type="submit" value="Verify">
+
+                <div class="spinner"></div>
+            </div>
+        </form>
+
+        <div id="response-container"></div>
+    </main>
+</body>
+
+</html>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        // Add an event listener for the form submission
+        $('#verification-form').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Get user input from the form
+            const userInput = $('#info').val();
+            
+            console.log(userInput);
+            console.log(userInput != "");
+            
+            if (userInput == "") {
+                alert("Hey, type your information first.");
+            } else {
+                $(".spinner").show();
+                // Make the API request
+                $.ajax({
+                    url: 'chat.php',
+                    type: 'POST',
+                    data: { info: userInput },
+                    success: function (response) {
+                        // Update the content below the form with the API response
+                        $(".spinner").hide(); 
+                        $('#response-container').html('<br><p>' + response + '</p>');
+
+                    },
+                    error: function (xhr, status, error) {
+                        $(".spinner").hide();
+                        console.error(error);
+                        // Handle errors here if needed
+                    }
+                });
+            }
+
+        });
+    });
+</script>
+
+
+
+</html>

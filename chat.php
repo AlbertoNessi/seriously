@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Fact-check:";
 
     // Imposta l'API Key di OpenAI
-    $api_key = getenv('OPENAI_API_KEY');
+    $api_key = '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';
 
     // URL dell'API di OpenAI per generare risposte da ChatGPT
     $api_url = 'https://api.openai.com/v1/chat/completions';
@@ -61,13 +61,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo 'Errore nella richiesta API: ' . curl_error($ch);
     } else {
         $decoded_response = json_decode($response, true);
-
+        
         $chat_gpt_response = $decoded_response['choices'][0]['message']['content'];
 
         $utf8Response = htmlspecialchars($chat_gpt_response, ENT_QUOTES, 'UTF-8');
 
         // Return the answer
-        echo json_encode($utf8Response);
+        echo json_encode($utf8Response, JSON_UNESCAPED_UNICODE);
     }
 
     // Chiudi la connessione cURL
